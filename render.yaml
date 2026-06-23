@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: rinha-clinic
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    envVars:
+      - key: SARVAM_API_KEY
+        sync: false
+      - key: GROQ_API_KEY
+        sync: false
