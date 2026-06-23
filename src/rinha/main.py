@@ -31,16 +31,18 @@ async def twilio_call():
 
 # ── Exotel ───────────────────────────────────────────────────────────────────
 
-EXOTEL_GREETING = """<?xml version="1.0" encoding="UTF-8"?>
+EXOTEL_BASE = "https://rinha-clinic.onrender.com"
+
+EXOTEL_GREETING = f"""<?xml version="1.0" encoding="UTF-8"?>
 <Response>
     <Say>Namaste. Dr. Sharma clinic mein aapka swagat hai. Appointment book karne ke liye, kripya beep ke baad apna naam, phone number aur pasand ka samay bataayein.</Say>
-    <Record maxSilence="4s" action="/exotel-recording" method="POST" />
+    <Record maxSilence="4s" action="{EXOTEL_BASE}/exotel-recording" method="POST" />
 </Response>"""
 
-EXOTEL_RESPONSE_TEMPLATE = """<?xml version="1.0" encoding="UTF-8"?>
+EXOTEL_RESPONSE_TEMPLATE = f"""<?xml version="1.0" encoding="UTF-8"?>
 <Response>
-    <Say>{reply}</Say>
-    <Record maxSilence="4s" action="/exotel-recording" method="POST" />
+    <Say>{{reply}}</Say>
+    <Record maxSilence="4s" action="{EXOTEL_BASE}/exotel-recording" method="POST" />
 </Response>"""
 
 
