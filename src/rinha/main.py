@@ -152,9 +152,14 @@ async def process_speech(CallSid: str = Form(...),
     return PlainTextResponse(twiml, media_type="text/xml")
 
 
+from pathlib import Path
+
+_LANDING = (Path(__file__).resolve().parent.parent.parent / "landing.html").read_text()
+
+
 @app.get("/", response_class=HTMLResponse)
 async def index():
-    return "<h1>Rinha Clinic</h1><p>AI receptionist running.</p>"
+    return HTMLResponse(_LANDING)
 
 
 @app.get("/health")

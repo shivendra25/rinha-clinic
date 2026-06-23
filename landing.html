@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rinha — AI Receptionist for Indian Clinics</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; color:#1a1a2e; background:#fafbfc; line-height:1.6 }
+  section { padding: 80px 20px; max-width: 1100px; margin: 0 auto }
+  h1 { font-size: 3.2rem; font-weight: 800; line-height: 1.2 }
+  h2 { font-size: 2.2rem; font-weight: 700; text-align: center; margin-bottom: 16px }
+  p.subtitle { font-size: 1.2rem; color: #555; text-align: center; max-width: 600px; margin: 0 auto 48px }
+
+  /* Hero */
+  .hero { background: linear-gradient(135deg, #0d1117 0%, #161b22 50%, #0d4529 100%); color: #fff; text-align: center; padding: 100px 20px 120px; position: relative; overflow: hidden }
+  .hero::after { content: ''; position: absolute; bottom: -40px; left: -10%; width: 120%; height: 80px; background: #fafbfc; border-radius: 50% 50% 0 0 }
+  .hero h1 { margin-bottom: 20px }
+  .hero h1 span { color: #2ea44f }
+  .hero p { font-size: 1.3rem; color: #8b949e; max-width: 650px; margin: 0 auto 36px }
+  .hero .cta { display: inline-block; background: #2ea44f; color: #fff; padding: 16px 36px; border-radius: 8px; font-size: 1.1rem; font-weight: 600; text-decoration: none; transition: .2s }
+  .hero .cta:hover { background: #3fb950; transform: translateY(-1px) }
+  .hero .stats { display: flex; gap: 40px; justify-content: center; margin-top: 60px; flex-wrap: wrap }
+  .hero .stat { text-align: center }
+  .hero .stat .num { font-size: 2.5rem; font-weight: 800; color: #2ea44f }
+  .hero .stat .lbl { font-size: .9rem; color: #8b949e }
+
+  /* How it works */
+  .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 24px; margin-top: 48px }
+  .step { background: #fff; border: 1px solid #e5e7eb; border-radius: 12px; padding: 32px 24px; text-align: center; transition: .2s }
+  .step:hover { box-shadow: 0 8px 30px rgba(0,0,0,.08); transform: translateY(-2px) }
+  .step .icon { font-size: 2.5rem; margin-bottom: 16px }
+  .step h3 { font-size: 1.1rem; margin-bottom: 8px }
+  .step p { font-size: .92rem; color: #555 }
+
+  /* Benefits */
+  .benefits-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-top: 48px }
+  .benefit { background: #fff; border-left: 4px solid #2ea44f; padding: 24px; border-radius: 0 8px 8px 0; box-shadow: 0 1px 3px rgba(0,0,0,.04) }
+  .benefit h3 { font-size: 1.1rem; margin-bottom: 6px }
+  .benefit p { font-size: .92rem; color: #555 }
+
+  /* Economics */
+  .econ { display: flex; gap: 24px; margin-top: 48px; flex-wrap: wrap }
+  .econ .card { flex: 1; min-width: 280px; background: #fff; border-radius: 12px; padding: 32px; text-align: center; border: 1px solid #e5e7eb }
+  .econ .card.ours { border: 2px solid #2ea44f; position: relative }
+  .econ .card.ours::before { content: 'BEST VALUE'; position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: #2ea44f; color: #fff; padding: 4px 16px; border-radius: 20px; font-size: .75rem; font-weight: 700; letter-spacing: .5px }
+  .econ .card h3 { font-size: 1rem; color: #555 }
+  .econ .card .price { font-size: 2.8rem; font-weight: 800; margin: 12px 0 }
+  .econ .card ul { list-style: none; text-align: left; margin-top: 16px }
+  .econ .card li { padding: 6px 0; font-size: .9rem; color: #555 }
+  .econ .card li::before { content: '✓ '; color: #2ea44f; font-weight: 700 }
+
+  /* FAQ */
+  .faq { margin-top: 48px }
+  .faq-item { background: #fff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 20px 24px; margin-bottom: 12px }
+  .faq-item h3 { font-size: 1rem; margin-bottom: 6px }
+  .faq-item p { font-size: .92rem; color: #555 }
+
+  /* CTA bottom */
+  .cta-section { background: #0d1117; color: #fff; text-align: center; padding: 80px 20px; margin-top: 40px }
+  .cta-section h2 { color: #fff }
+  .cta-section .cta { display: inline-block; background: #2ea44f; color: #fff; padding: 16px 36px; border-radius: 8px; font-size: 1.1rem; font-weight: 600; text-decoration: none; margin-top: 24px }
+  .cta-section .cta:hover { background: #3fb950 }
+  .cta-section p { color: #8b949e; max-width: 550px; margin: 0 auto }
+
+  /* Footer */
+  footer { text-align: center; padding: 24px; font-size: .85rem; color: #888 }
+</style>
+</head>
+<body>
+
+<section class="hero">
+  <h1>Your Clinic.<br>Always <span>Answered.</span></h1>
+  <p>An AI receptionist that picks up every call, speaks Hindi, English & Kannada, and books appointments — 24/7, for less than the cost of a dinner.</p>
+  <a href="#get-started" class="cta">Get Early Access →</a>
+  <div class="stats">
+    <div class="stat"><div class="num">47%</div><div class="lbl">missed calls lost<br>as revenue daily</div></div>
+    <div class="stat"><div class="num">₹4,999<span style="font-size:1rem">/mo</span></div><div class="lbl">vs ₹18,000+<br>for a receptionist</div></div>
+    <div class="stat"><div class="num">3</div><div class="lbl">languages<br>hi · en · kn</div></div>
+  </div>
+</section>
+
+<section>
+  <h2>How It Works</h2>
+  <p class="subtitle">Plug it into your existing phone number. That's it.</p>
+  <div class="steps">
+    <div class="step">
+      <div class="icon">📞</div>
+      <h3>Patient Calls</h3>
+      <p>Calls your clinic number. The AI picks up instantly — no rings, no wait.</p>
+    </div>
+    <div class="step">
+      <div class="icon">🗣️</div>
+      <h3>AI Understands</h3>
+      <p>Speaks Hindi, English, or Kannada. Understands names, dates, times, and symptoms.</p>
+    </div>
+    <div class="step">
+      <div class="icon">📋</div>
+      <h3>Appointment Booked</h3>
+      <p>Confirms the slot, collects patient info, and adds it to your calendar. Done.</p>
+    </div>
+    <div class="step">
+      <div class="icon">📱</div>
+      <h3>You Get Notified</h3>
+      <p>Booking confirmation sent to you and the patient. Dashboard shows every call.</p>
+    </div>
+  </div>
+</section>
+
+<section style="background:#f0f4f1">
+  <h2>Why Doctors Choose Rinha</h2>
+  <p class="subtitle">Built for single-doctor clinics, dermatologists, dentists, and physiotherapists.</p>
+  <div class="benefits-grid">
+    <div class="benefit"><h3>🚫 Zero Missed Calls</h3><p>Every call answered. No patient hears a busy tone or gets ignored. An unanswered call is a lost patient — permanently.</p></div>
+    <div class="benefit"><h3>💰 70% Cheaper Than Staff</h3><p>A receptionist costs ₹15,000–25,000/month + leaves + sick days + errors. Rinha is ₹4,999/month, never takes leave, never makes mistakes.</p></div>
+    <div class="benefit"><h3>🌙 Works 24/7</h3><p>2 AM toothache? Sunday evening fever? The AI answers, triages urgency, and books the next available slot. Your clinic never sleeps.</p></div>
+    <div class="benefit"><h3>🗣️ Trilingual</h3><p>Hindi, English, Kannada — out of the box. More languages coming. Switches automatically based on what the patient speaks.</p></div>
+    <div class="benefit"><h3>📊 Dashboard & Records</h3><p>See every call, every booking, every missed opportunity. Export reports. Know your clinic's call health in one glance.</p></div>
+    <div class="benefit"><h3>🔌 No Hardware</h3><p>Works with your existing phone number. No new devices, no installation. We configure everything remotely in under 30 minutes.</p></div>
+  </div>
+</section>
+
+<section>
+  <h2>The Numbers</h2>
+  <p class="subtitle">What a missed call really costs you.</p>
+  <div class="econ">
+    <div class="card">
+      <h3>Human Receptionist</h3>
+      <div class="price">₹18,000<span style="font-size:1rem">/mo</span></div>
+      <ul>
+        <li>Salary + overtime</li>
+        <li>Sick leaves & holidays</li>
+        <li>Human errors while booking</li>
+        <li>Works 8-10 hours only</li>
+        <li>Training & turnover</li>
+        <li>Misses calls when busy</li>
+      </ul>
+    </div>
+    <div class="card ours">
+      <h3>Rinha AI</h3>
+      <div class="price">₹4,999<span style="font-size:1rem">/mo</span></div>
+      <ul>
+        <li>No salary, no overtime</li>
+        <li>Never takes a day off</li>
+        <li>Zero booking errors</li>
+        <li>Works 24×7×365</li>
+        <li>Setup in 30 minutes</li>
+        <li>Handles unlimited calls</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section style="background:#f0f4f1">
+  <h2>Frequently Asked Questions</h2>
+  <div class="faq" style="max-width:700px; margin:48px auto 0">
+    <div class="faq-item"><h3>Does it work with my existing phone number?</h3><p>Yes. We configure call forwarding from your current number. Patients dial the same number they always have.</p></div>
+    <div class="faq-item"><h3>What if a patient asks something the AI doesn't know?</h3><p>The AI handles common queries (timings, fees, directions, doctor availability). Anything complex gets forwarded to your phone directly.</p></div>
+    <div class="faq-item"><h3>Is patient data safe?</h3><p>Yes. We comply with India's DPDP Act 2023. Data is encrypted, stored in India, and deletable on request. No data is sold or shared.</p></div>
+    <div class="faq-item"><h3>What languages are supported?</h3><p>Hindi, English, and Kannada today. Tamil, Telugu, Marathi, and Bengali coming soon.</p></div>
+    <div class="faq-item"><h3>How long does setup take?</h3><p>30 minutes. We do everything remotely. You don't install anything.</p></div>
+    <div class="faq-item"><h3>Can I try it before paying?</h3><p>Yes. 14-day free trial. No card required. If it doesn't capture more patients, you pay nothing.</p></div>
+  </div>
+</section>
+
+<section class="cta-section" id="get-started">
+  <h2>Every missed call is a patient<br>who went to the next clinic.</h2>
+  <p>14-day free trial. One phone number. Zero setup on your end.</p>
+  <a href="#" class="cta">Claim Your Free Trial →</a>
+  <p style="margin-top:16px; font-size:.85rem">Or call us: +91 70000 81094</p>
+</section>
+
+<footer>
+  Rinha &copy; 2026 &middot; Built in Bangalore &middot; DPDP Act 2023 Compliant
+</footer>
+
+</body>
+</html>
