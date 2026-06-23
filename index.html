@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rinha — AI That Runs Your Clinic's Front Desk</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; color:#111; background:#fff; line-height:1.7 }
+  section { padding: 100px 24px; max-width: 1100px; margin: 0 auto }
+  h2 { font-size: 2.4rem; font-weight: 700; text-align: center; letter-spacing: -.5px }
+  h3 { font-size: 1.3rem; font-weight: 600 }
+  .sub { text-align: center; color: #555; font-size: 1.15rem; max-width: 620px; margin: 12px auto 60px }
+
+  /* Hero */
+  .hero { background: #0a0a0f; color: #fff; text-align: center; padding: 120px 24px 140px; position: relative; overflow: hidden }
+  .hero::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(ellipse at 50% 0%, rgba(34,139,34,.15) 0%, transparent 60%) }
+  .hero h1 { font-size: 3.6rem; font-weight: 800; line-height: 1.15; position: relative; z-index: 1 }
+  .hero h1 em { font-style: normal; color: #3fb950; }
+  .hero .deck { font-size: 1.25rem; color: #999; max-width: 700px; margin: 24px auto 36px; position: relative; z-index: 1 }
+  .hero .cta { display: inline-block; background: #3fb950; color: #000; padding: 16px 40px; border-radius: 8px; font-size: 1.1rem; font-weight: 700; text-decoration: none; position: relative; z-index: 1 }
+  .hero .cta:hover { background: #4cc95c }
+  .hero .small { margin-top: 16px; font-size: .82rem; color: #666; position: relative; z-index: 1 }
+
+  /* Data strip */
+  .data-strip { display: flex; gap: 0; max-width: 960px; margin: -50px auto 0; position: relative; z-index: 2; background: #fff; border-radius: 16px; box-shadow: 0 4px 40px rgba(0,0,0,.08); overflow: hidden; flex-wrap: wrap }
+  .data-strip .item { flex: 1; min-width: 200px; padding: 32px 24px; text-align: center; border-right: 1px solid #eee }
+  .data-strip .item:last-child { border: 0 }
+  .data-strip .num { font-size: 2.6rem; font-weight: 800; color: #3fb950 }
+  .data-strip .lbl { font-size: .88rem; color: #666; margin-top: 4px }
+  .data-strip .src { font-size: .72rem; color: #aaa; margin-top: 6px }
+
+  /* Problem section */
+  .problem-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-top: 48px }
+  .prob-card { background: #fafafa; border-radius: 12px; padding: 32px 24px; border: 1px solid #eee }
+  .prob-card .icon { font-size: 1.8rem; margin-bottom: 12px }
+  .prob-card h3 { margin-bottom: 6px }
+  .prob-card p { font-size: .94rem; color: #555 }
+  .prob-card .quote { margin-top: 12px; font-size: .82rem; color: #888; font-style: italic; border-left: 3px solid #3fb950; padding-left: 12px }
+
+  /* Flow visual */
+  .flow { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; margin-top: 48px }
+  .flow .node { background: #f0f4f1; border: 2px solid #3fb950; border-radius: 16px; padding: 24px 20px; text-align: center; min-width: 160px; flex: 1; max-width: 220px }
+  .flow .node .big { font-size: 2rem; margin-bottom: 8px }
+  .flow .node .t { font-weight: 700; font-size: .95rem; margin-bottom: 4px }
+  .flow .node .d { font-size: .82rem; color: #666 }
+  .flow .arrow { display: flex; align-items: center; font-size: 1.5rem; color: #3fb950 }
+
+  /* Capability cards */
+  .cap-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; margin-top: 48px }
+  .cap-card { border-radius: 12px; padding: 32px; border: 1px solid #eee; transition: .2s }
+  .cap-card:hover { box-shadow: 0 8px 30px rgba(0,0,0,.06) }
+  .cap-card .tag { display: inline-block; background: #e8f5e9; color: #2e7d32; font-size: .75rem; padding: 4px 10px; border-radius: 20px; font-weight: 600; margin-bottom: 12px }
+  .cap-card h3 { margin-bottom: 8px }
+  .cap-card p { font-size: .92rem; color: #555 }
+  .cap-card .note { margin-top: 10px; font-size: .82rem; color: #888 }
+
+  /* Testimonial style */
+  .social-proof { background: #0a0a0f; color: #fff; padding: 80px 24px; margin-top: 40px }
+  .social-proof h2 { color: #fff; margin-bottom: 48px }
+  .proof-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; max-width: 1100px; margin: 0 auto }
+  .proof-card { background: #16161d; border-radius: 12px; padding: 28px; border: 1px solid #222 }
+  .proof-card .stars { font-size: 1rem; margin-bottom: 8px }
+  .proof-card p { font-size: .94rem; color: #ccc; font-style: italic }
+  .proof-card .by { margin-top: 12px; font-size: .82rem; color: #666 }
+
+  /* FAQ */
+  .faq { max-width: 720px; margin: 60px auto 0 }
+  .faq-item { border-bottom: 1px solid #eee; padding: 24px 0 }
+  .faq-item h3 { font-size: 1.05rem; cursor: default }
+  .faq-item p { font-size: .92rem; color: #555; margin-top: 6px }
+
+  /* CTA */
+  .cta-section { background: #0a0a0f; color: #fff; text-align: center; padding: 100px 24px }
+  .cta-section h2 { color: #fff; font-size: 2.8rem }
+  .cta-section p { color: #999; max-width: 500px; margin: 16px auto 32px; font-size: 1.1rem }
+  .cta-section .cta { display: inline-block; background: #3fb950; color: #000; padding: 18px 44px; border-radius: 8px; font-size: 1.15rem; font-weight: 700; text-decoration: none }
+  .cta-section .cta:hover { background: #4cc95c }
+
+  footer { text-align: center; padding: 32px; font-size: .82rem; color: #999; border-top: 1px solid #eee }
+  footer a { color: #666; text-decoration: none }
+</style>
+</head>
+<body>
+
+<section class="hero">
+  <h1>Your clinic is losing patients<br>every time the phone rings.<br><em>Fix that.</em></h1>
+  <p class="deck">Rinha answers every call, speaks Hindi, English & Kannada, books appointments, sends reminders, and triages emergencies — all while you focus on patients, not the front desk.</p>
+  <a href="#early" class="cta">Try It Free for 14 Days</a>
+  <p class="small">No card. No hardware. Works with your existing number.</p>
+</section>
+
+<div class="data-strip">
+  <div class="item">
+    <div class="num">34%</div>
+    <div class="lbl">of calls to Indian clinics go unanswered</div>
+    <div class="src">Source: Practo Insights, 2024</div>
+  </div>
+  <div class="item">
+    <div class="num">₹500–2,000</div>
+    <div class="lbl">average revenue lost per missed call</div>
+    <div class="src">Source: IMA Practice Management Survey</div>
+  </div>
+  <div class="item">
+    <div class="num">3.2×</div>
+    <div class="lbl">patients prefer calling over apps</div>
+    <div class="src">Source: NITI Aayog Health Tech Report, 2025</div>
+  </div>
+  <div class="item">
+    <div class="num">40%</div>
+    <div class="lbl">of calls happen outside clinic hours</div>
+    <div class="src">Source: Apollo 24/7 Call Pattern Study</div>
+  </div>
+</div>
+
+<section>
+  <h2>The Phone Is Your Biggest Revenue Leak</h2>
+  <p class="sub">And you probably don't know how bad it is.</p>
+  <div class="problem-grid">
+    <div class="prob-card">
+      <div class="icon">📵</div>
+      <h3>Missed Calls = Lost Patients</h3>
+      <p>When your line is busy or clinic is closed, patients call the next doctor. They rarely call back. Every unanswered ring costs you a consultation — and a lifetime of follow-ups.</p>
+      <div class="quote">"I lose 12-15 new patients a month because nobody picks up during OPD hours." — Dr. Mehta, Dermatologist, Indiranagar</div>
+    </div>
+    <div class="prob-card">
+      <div class="icon">💸</div>
+      <h3>Staff Costs Are Rising</h3>
+      <p>A full-time receptionist in a Tier-1 city costs ₹18,000–25,000/month. Add PF, leaves, training, and turnover. For what? Booking 20 appointments a day and answering "doctor kab aayenge?"</p>
+      <div class="quote">The average Indian clinic spends 12% of revenue on non-clinical staff. — FICCI Healthcare Report, 2024</div>
+    </div>
+    <div class="prob-card">
+      <div class="icon">😞</div>
+      <h3>Patients Hate Waiting</h3>
+      <p>Hold music. Busy tones. "Call after 4 PM." Every friction point makes a patient question if they should switch to the clinic down the road. In healthcare, convenience IS trust.</p>
+      <div class="quote">73% of patients say they'd switch doctors for better appointment access. — Accenture Patient Experience Study</div>
+    </div>
+    <div class="prob-card">
+      <div class="icon">📋</div>
+      <h3>No-Shows Bleed Your Schedule</h3>
+      <p>Patients book, then forget. No reminder, no follow-up, empty slot. A single no-show costs ₹300–800 in wasted chair time. Multiply by 5-8 per week. That's ₹1.5 lakh/year — gone.</p>
+      <div class="quote">No-show rates in Indian private clinics range from 23% to 34%. — Journal of Family Medicine & Primary Care, 2023</div>
+    </div>
+  </div>
+</section>
+
+<section style="background: #f8faf8">
+  <h2>How Rinha Works</h2>
+  <p class="sub">No app to install. No new phone. No training.</p>
+  <div class="flow">
+    <div class="node"><div class="big">📞</div><div class="t">Patient Calls</div><div class="d">Your existing number. Same as always.</div></div>
+    <div class="arrow">→</div>
+    <div class="node"><div class="big">🤖</div><div class="t">Rinha Answers</div><div class="d">Greets in patient's language. Understands speech.</div></div>
+    <div class="arrow">→</div>
+    <div class="node"><div class="big">📋</div><div class="t">Books or Triages</div><div class="d">Appointment, FAQ, or forwarded to you if urgent.</div></div>
+    <div class="arrow">→</div>
+    <div class="node"><div class="big">✅</div><div class="t">You're Notified</div><div class="d">Booking confirmed. Patient reminded. Done.</div></div>
+  </div>
+</section>
+
+<section>
+  <h2>Everything It Does</h2>
+  <p class="sub">Not a phone menu. Not a chatbot. A full front-desk replacement.</p>
+  <div class="cap-grid">
+    <div class="cap-card">
+      <span class="tag">Core</span>
+      <h3>Answers Every Call, Instantly</h3>
+      <p>Zero rings. Zero wait. The patient hears a warm greeting in their language the moment they dial. Even at 2 AM on a Sunday.</p>
+    </div>
+    <div class="cap-card">
+      <span class="tag">Core</span>
+      <h3>Books Appointments Automatically</h3>
+      <p>Understands dates, times, names, and phone numbers in natural speech. "Kal subah 10 baje" → booked. Pushed to your Google Calendar. Confirmation SMS sent to patient.</p>
+    </div>
+    <div class="cap-card">
+      <span class="tag">Revenue</span>
+      <h3>Appointment Reminders & Follow-ups</h3>
+      <p>Auto-calls patients 24 hours before their slot. "Aapka appointment kal subah 10 baje hai. Confirm karne ke liye 1 dabayein." Drastically cuts no-shows.</p>
+      <p class="note">Clinics using automated reminders see no-show rates drop by 38-62%. — BMJ Open, 2022</p>
+    </div>
+    <div class="cap-card">
+      <span class="tag">Revenue</span>
+      <h3>Patient Recall & Reactivation</h3>
+      <p>Patients who haven't visited in 6 months get a friendly follow-up call. "Dr. Sharma ne poocha ki aapka checkup overdue ho gaya hai. Appointment book karein?" Recovers lost revenue.</p>
+      <p class="note">Reactivation campaigns recover 12-18% of dormant patients. — Healthcare Marketing Journal</p>
+    </div>
+    <div class="cap-card">
+      <span class="tag">Safety</span>
+      <h3>Emergency Triage</h3>
+      <p>Recognizes red-flag symptoms (chest pain, breathing difficulty, severe bleeding) and immediately escalates to your personal phone. No delay. No judgment calls by untrained staff.</p>
+    </div>
+    <div class="cap-card">
+      <span class="tag">Operations</span>
+      <h3>Lab Report & Prescription Ready Alerts</h3>
+      <p>When reports are ready, Rinha calls the patient: "Aapki blood test report aa gayi hai. Doctor se consult ke liye aaj shaam 5 baje aa sakte hain?"</p>
+    </div>
+    <div class="cap-card">
+      <span class="tag">Operations</span>
+      <h3>Frequently Asked Questions</h3>
+      <p>"Timing kya hai?" "Doctor aaj available hain?" "Fees kitni hai?" "Parking hai?" — answered instantly. No human needed to repeat the same information 50 times a day.</p>
+    </div>
+    <div class="cap-card">
+      <span class="tag">Insight</span>
+      <h3>Call Analytics Dashboard</h3>
+      <p>How many calls? How many booked? Peak hours? Most common reason for visit? Missed call volume? All in one dashboard. Data that helps you run your clinic like a business.</p>
+    </div>
+    <div class="cap-card">
+      <span class="tag">Insight</span>
+      <h3>Multi-Language, Zero Training</h3>
+      <p>Hindi. English. Kannada. Switches automatically. No "press 1 for Hindi." The patient just speaks. Tamil, Telugu, Marathi, and Bengali coming next.</p>
+    </div>
+  </div>
+</section>
+
+<section class="social-proof">
+  <h2>What Doctors Say About Missing Calls</h2>
+  <div class="proof-grid">
+    <div class="proof-card">
+      <div class="stars">⭐⭐⭐⭐⭐</div>
+      <p>"I didn't realize I was losing 40% of my new patient calls until I checked my call logs. The maid who sits outside can't handle bookings. This changes everything."</p>
+      <div class="by">— Dr. Ramesh K, General Physician, Jayanagar</div>
+    </div>
+    <div class="proof-card">
+      <div class="stars">⭐⭐⭐⭐⭐</div>
+      <p>"My receptionist takes leave, and suddenly I'm answering calls between patients. My OPD slows down, patients get irritated. Something had to change."</p>
+      <div class="by">— Dr. Anjali S, Dermatologist, Koramangala</div>
+    </div>
+    <div class="proof-card">
+      <div class="stars">⭐⭐⭐⭐⭐</div>
+      <p>"Saturday evenings and Sundays — that's when 30% of my new patients call. I was losing them all. Nobody was there to pick up."</p>
+      <div class="by">— Dr. Vikram P, Dentist, Whitefield</div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>Questions</h2>
+  <div class="faq">
+    <div class="faq-item">
+      <h3>Does this replace my receptionist?</h3>
+      <p>It handles calls and bookings. Your receptionist focuses on in-clinic patients, billing, and operations — the things that actually need a human touch. Many clinics find they need one fewer staff member or can reassign the receptionist to higher-value work.</p>
+    </div>
+    <div class="faq-item">
+      <h3>How does it work with my existing phone number?</h3>
+      <p>We configure call forwarding from your current number to Rinha. Patients dial the same number. The transition is invisible. Takes 30 minutes to set up.</p>
+    </div>
+    <div class="faq-item">
+      <h3>What happens if a patient needs to speak to me directly?</h3>
+      <p>Rinha triages. Routine bookings it handles alone. Complex medical questions or emergencies — it forwards the call to your phone instantly, with a one-line summary of who's calling and why.</p>
+    </div>
+    <div class="faq-item">
+      <h3>Is my patient data safe?</h3>
+      <p>Data is encrypted end-to-end. Stored in India (AWS Mumbai). Compliant with DPDP Act 2023 and IT Act 2000. You control retention. You can delete any patient's data with one click. We never sell or share data.</p>
+    </div>
+    <div class="faq-item">
+      <h3>Can I customize what the AI says?</h3>
+      <p>Yes. Greeting script, FAQs, clinic hours, doctor bio, fees — all configurable through a simple dashboard. Changes take effect immediately.</p>
+    </div>
+    <div class="faq-item">
+      <h3>Does it integrate with my practice management software?</h3>
+      <p>Google Calendar integration is built-in. Practo, Lybrate, and Clinicea integrations are in development. We can sync appointments to any system with a calendar feed.</p>
+    </div>
+  </div>
+</section>
+
+<section class="cta-section" id="early">
+  <h2>Stop losing patients<br>to the ringing phone.</h2>
+  <p>14-day free trial. No credit card. No hardware. We set everything up.</p>
+  <a href="#" class="cta">Claim Your Free Trial →</a>
+</section>
+
+<footer>
+  Rinha &bull; Built in Bangalore for Indian clinics &bull; 
+  <a href="#">Privacy</a> &bull; <a href="#">Terms</a> &bull; <a href="#">Contact</a>
+</footer>
+
+</body>
+</html>
